@@ -189,6 +189,8 @@ To use the scraper, we have to run both scraper client and the API.
 ![Client result screen](../resources/client_result_screen.png)
 <p align=center>[Figure 05 - Client application screen with scraping results]</p>
 
+6. When there are more than 10 hyperlinks detected, accessibility of those will be checked page basis. Therefore, click on the `ACCESS NEXT 10 OF REMAINING...` button to proceed with next 10 hyperlinks. And if there are inaccessible hyperlinks detected, the value will be accumilated to the URL insights data.
+
 ## CI/CD usage
 
 Added github workflow `YML` files to both scraper API and client repos to verify,
