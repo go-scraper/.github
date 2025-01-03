@@ -4,10 +4,14 @@
 
 1. [Introduction](#introduction)
 2. [Software components](#software-components)
-3. [Technical stack](#technical-stack)
-4. [How to run tests](#how-to-run-tests)
-5. [Pre-requisites to build and run](#pre-requisites-to-build-and-run)
-3. [How to build and run](#how-to-build-and-run)
+3. [Design challenge](#design-challenge)
+4. [Technical stack](#technical-stack)
+5. [How to run unit tests](#how-to-run-unit-tests)
+6. [Pre-requisites to build and run](#pre-requisites-to-build-and-run)
+7. [How to build and run](#how-to-build-and-run)
+8. [CI/CD usage](#cicd-usage)
+9. [Logging](#logging)
+10. [For next steps](#for-next-steps)
 
 ## Introduction
 
@@ -50,6 +54,32 @@ The *scrape API* modularized as follows,
 
 ![Scrape API highlevel architecture diagram](../resources/api_highlevel_arch_diagram.jpg)
 <p align=center>[Figure 02 - Scraper API high level architecture diagram]</p>
+
+## Design challenge
+
+> Requirement
+
+After fetching the HTML content we should find all external and internal links from the HTML content and find the number of inaccessible links, if there are any.
+
+> Challenge
+
+An HTML page can have numerous amount of hyperlinks and each hyperlink is pointed to a host with some latency. This latency can differ from 100 milliseconds to 10 seconds or more due to many facts. 
+
+If user enters a website with hundreds of links, and if our service is trying to check the accessibility of each link before respond back to the initial query, then user might need to wait for a minute or two or even more to see the response. Also, if user submits a website URL with thousands of hyperlinks on the same page, then our system will struggle to process all and user may leave due to the long waiting time. But due to our concurrent nature of implementation and statelessness of the API, the system will still access all hyperlinks, even after user closed the browser.
+
+Therefore, this can cause for a bottleneck in the system and can cause for a system failure easily.
+
+> Solution
+
+We designed the scraper-api to process only 10 hyperlinks concurrently at a time. After receiving the initial scraping request the scraper-API fetch the HTML content and collect all required information and store in the in-memory storage. And then, process first 10 hyperlinks and mark the accessibility status and reply back with the response. To process the rest of the hyperlinks, we provided a button to access next 10 hyperlinks subsequently and we accumilate inaccessible hyperlink count and show on the UI.
+
+With this approach, the initial response of scraping a website with around 500 hyperlinks took only between 2-3 seconds and each subsequent hyperlink process request took only 1-2 seconds.
+
+With this approach the application can support websites with considerably high amount of URLs.
+
+#### Limitations
+
+* In-memory storage - Since we use in-memory storage to store extracted information, this can make a negative impact when receiving many requests from users to fetch huge websites. Also, can cause for data loss.
 
 ## Technical stack
 
@@ -158,3 +188,29 @@ To use the scraper, we have to run both scraper client and the API.
 
 ![Client result screen](../resources/client_result_screen.png)
 <p align=center>[Figure 05 - Client application screen with scraping results]</p>
+
+## CI/CD usage
+
+Added github workflow `YML` files to both scraper API and client repos to verify,
+
+* Dependency download
+* Unit tests
+* Source build
+* Docker build
+
+## Logging
+
+Defined custom loggers for the `scraper-api` and following log levels are available.
+
+1. DEBUG - The printed log line will start with `[scraper-DEBUG]`
+2. INFO - The printed log line will start with `[scraper-INFO]`
+3. ERROR - The printed log line will start with `[scraper-ERROR]`
+
+## For next steps
+
+* Replace the in-memory storage with a database.
+* Use a messaging technique to pass data changes in real-time to the UI.
+* Provide a personalized dashboard to see/manage the scraping history.
+* Allow users to create scheduled scraping jobs.
+* Allow users to setup custom data processors and configure alerts.
+* Introduce a pricing model based on supported features/provided resource limits.
