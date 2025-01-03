@@ -208,6 +208,8 @@ Defined custom loggers for the `scraper-api` and following log levels are availa
 
 ## For next steps
 
+Below improvements/extensions identified as potential next steps.
+
 * Replace the in-memory storage with a database.
 * Use a messaging technique to pass data changes in real-time to the UI.
 * Provide a personalized dashboard to see/manage the scraping history.
