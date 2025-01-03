@@ -23,10 +23,16 @@ This is a scraper which can use to submit a valid URL and scrape following infor
 
 ## Software components
 
-1. [Scraper client](https://github.com/go-scraper/scraper-client) - This is the client facing web application which can access through the browser. This connects with the Scraper API to execute scraping.
-2. [Scraper API](https://github.com/go-scraper/scraper-api) - This is the backend API service for the scraper client web application. This executes the scraping and responds back to the web application with the information found.
+The scrape application consists of two main software components as Scraper API and Scraper client. 
 
-The scrape API modularized as follows,
+![Scaper high level flow](../resources/high_level_app_flow.jpg)
+<p align=center>[Figure 01 - Scraper high level design]</p>
+
+1. [Scraper API](https://github.com/go-scraper/scraper-api) - This is the backend API service for the scraper client web application. This executes the scraping and responds back to the client web application with the information found.
+2. [Scraper client](https://github.com/go-scraper/scraper-client) - This is the client facing web application which can access through the browser. This connects with the Scraper API to execute scraping.
+
+
+The *scrape API* modularized as follows,
 
 1. Handlers
     * Scrape handler - Handles the initial scrape request.
@@ -41,6 +47,9 @@ The scrape API modularized as follows,
     * In-memory storage - Holds fetched information mapped to a random unique key.
 5. Utils
     * Helpers - Helper functions.
+
+![Scrape API highlevel architecture diagram](../resources/api_highlevel_arch_diagram.jpg)
+<p align=center>[Figure 02 - Scraper API high level architecture diagram]</p>
 
 ## Technical stack
 
@@ -84,7 +93,7 @@ The scrape API modularized as follows,
 5. To view the test coverage run `go tool cover -func=coverage.out` command.
 
 ![Test coverage output](../resources/test_coverage_output.png)
-<p align=center>[Figure 01 - Test coverage output]</p>
+<p align=center>[Figure 03 - Test coverage output]</p>
 
 ## Pre-requisites to build and run
 
@@ -143,9 +152,9 @@ To use the scraper, we have to run both scraper client and the API.
 4. Access the web application on your browser using the `http://localhost:3000/` URL.
 
 ![Client empty screen](../resources/client_empty_screen.png)
-<p align=center>[Figure 02 - Client application screen]</p>
+<p align=center>[Figure 04 - Client application screen]</p>
 
 5. Now you can enter a URL on the input box and click on `SCRAPE` button or hit `Enter`. You should see the scraping result as below screenshot.
 
 ![Client result screen](../resources/client_result_screen.png)
-<p align=center>[Figure 03 - Client application screen with scraping results]</p>
+<p align=center>[Figure 05 - Client application screen with scraping results]</p>
