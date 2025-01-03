@@ -26,6 +26,22 @@ This is a scraper which can use to submit a valid URL and scrape following infor
 1. [Scraper client](https://github.com/go-scraper/scraper-client) - This is the client facing web application which can access through the browser. This connects with the Scraper API to execute scraping.
 2. [Scraper API](https://github.com/go-scraper/scraper-api) - This is the backend API service for the scraper client web application. This executes the scraping and responds back to the web application with the information found.
 
+The scrape API modularized as follows,
+
+1. Handlers
+    * Scrape handler - Handles the initial scrape request.
+    * Page handler - Handles subsequent pagination requests.
+2. Services
+    * HTML parser - Fetch the HTML content of the given URL and process.
+    * URL status checker - Checks statuses of URLs found on HTML content.
+3. Models
+    * Entity - Models for the data transfer and storage within the application.
+    * Response - Models to construct API response payloads.
+4. Storage
+    * In-memory storage - Holds fetched information mapped to a random unique key.
+5. Utils
+    * Helpers - Helper functions.
+
 ## Technical stack
 
 ### Scraper API
@@ -68,6 +84,7 @@ This is a scraper which can use to submit a valid URL and scrape following infor
 5. To view the test coverage run `go tool cover -func=coverage.out` command.
 
 ![Test coverage output](../resources/test_coverage_output.png)
+<p align=center>[Figure 01 - Test coverage output]</p>
 
 ## Pre-requisites to build and run
 
@@ -126,9 +143,9 @@ To use the scraper, we have to run both scraper client and the API.
 4. Access the web application on your browser using the `http://localhost:3000/` URL.
 
 ![Client empty screen](../resources/client_empty_screen.png)
-[Figure 01 - Client application screen]
+<p align=center>[Figure 02 - Client application screen]</p>
 
 5. Now you can enter a URL on the input box and click on `SCRAPE` button or hit `Enter`. You should see the scraping result as below screenshot.
 
 ![Client result screen](../resources/client_result_screen.png)
-[Figure 02 - Client application screen with scraping results]
+<p align=center>[Figure 03 - Client application screen with scraping results]</p>
