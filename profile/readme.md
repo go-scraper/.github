@@ -11,7 +11,8 @@
 7. [How to build and run](#how-to-build-and-run)
 8. [CI/CD usage](#cicd-usage)
 9. [Logging](#logging)
-10. [For next steps](#for-next-steps)
+10. [Error handling](#error-handling)
+11. [For next steps](#for-next-steps)
 
 ## Introduction
 
@@ -139,7 +140,7 @@ To use the scraper, we have to run both scraper client and the API.
 2. Open the command line and navigate to the root folder `(scraper-api)` of the project.
 3. To build and run with the docker run `docker-compose up --build` command.
 4. Try sending a `GET` request using Postman or any client to the URL `http://localhost:8080/scrape?url=https://google.com`. You can have any valid URL to the `url` query parameter.
-5. If the application is up and running without any errors, you should receive a response in below format with the HTTP code `200`.
+5. If the application is up and running without any errors, you should receive a response in below format with the `HTTP status` code `200`.
 
 ```json
 {
@@ -169,6 +170,14 @@ To use the scraper, we have to run both scraper client and the API.
             ]
         }
     }
+}
+```
+
+Incase of an error, you should receive an error response in following format with the corresponding `HTTP status` code.
+
+```json
+{
+    "error": "Error message"
 }
 ```
 
@@ -207,6 +216,26 @@ Defined custom loggers for the `scraper-api` and following log levels are availa
 1. DEBUG - The printed log line will start with `[scraper-DEBUG]`
 2. INFO - The printed log line will start with `[scraper-INFO]`
 3. ERROR - The printed log line will start with `[scraper-ERROR]`
+
+## Error handling
+
+We designed the backend to return meaningful errors in error response, when there is a failure. Therefor the frontend client application can show the exact error received through the API.
+
+### Errors on scraping the given URL
+
+1. Invalid URL format
+
+![Invalid URL format error](../resources/invalid_url_error.png)
+
+2. Failed to fetch error
+
+![Failed to fetch error](../resources/failed_to_fetch_error.png)
+
+### Errors on accessbility check of hyperlinks
+
+When we check accessbility of hyperlinks, we return the original error without manipulating to allow user to see the original error and let them to make decisions.
+
+![Accessbility check error](../resources/accessibility_check_error.png)
 
 ## For next steps
 
